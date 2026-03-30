@@ -12,7 +12,7 @@
  *  understanding WHY password hashing, salting, and complexity
  *  policies exist in real security systems.
  *
- *  This is Phase 1 — intentionally minimal. No hashing, no
+ *  This is Phase 1 intentionally minimal. No hashing, no
  *  threads, no dictionary. Just the raw search engine, fully
  *  transparent, so every line is understandable before we build
  *  on top of it in later phases.
@@ -35,7 +35,7 @@
 #include <chrono>   // measuring elapsed time
 #include <cstdint>  // uint64_t for large candidate counts
 #include <iomanip>  // for formatting output
-
+#include "hash.h"
 
 
 
@@ -71,7 +71,7 @@ uint64_t computeSearchSpace(size_t base, int maxLen) {
     return total;
 }
 
-std::string analyze(const std::string& target) {
+std::string analyze(const std::string& target_hash) {
     size_t base = CHARSET.size();
     uint64_t total = computeSearchSpace(base, MAX_LENGTH);
 
@@ -91,7 +91,7 @@ std::string analyze(const std::string& target) {
         }
 
        
-        if (candidate == target) {
+       if (sha256(candidate) == target_hash) {
             return candidate;
         }
     }
@@ -109,7 +109,7 @@ int main() {
     std::cout << "================================================\n\n";
 
     std::string target;
-    std::cout << "  Enter test password: ";
+    std::cout << "  Enter SHA-256 hash to analyze: ";
     std::cin >> target;
     std::cout << "\n";
 
