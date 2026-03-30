@@ -1,0 +1,10 @@
+psat
+psat.exe
+*.exe
+*.out
+build/
+bin/
+obj/
+.vscode/
+.idea/
+.DS_Store
