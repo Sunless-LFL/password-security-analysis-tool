@@ -16,7 +16,7 @@ std::string sha256(const std::string& input) {
     std::ostringstream oss;
     for (unsigned int i = 0; i < len; i++) {
         oss << std::hex << std::setw(2) << std::setfill('0')
-            << (int)hash[i];
+            << static_cast<int>(hash[i]);
     }
     return oss.str();
 }
