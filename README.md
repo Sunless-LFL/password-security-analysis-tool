@@ -26,7 +26,7 @@ The code is the same code any security researcher writes. The difference is unde
 | Phase | Topic | What you learn | Status |
 |-------|-------|---------------|--------|
 | 1 | Exhaustive search (plaintext baseline) | Search space, base-N mapping, timing | ✅ Done |
-| 2 | Hash analysis (MD5 / SHA-256) | Why hashing matters, what "cracking a hash" means | 🔜 Next |
+| 2 | Hash analysis (SHA-256) | Why hashing matters, what "cracking a hash" means | ✅ Done |
 | 3 | Dictionary attack | Why common passwords fail even with hashing | 🔜 Planned |
 | 4 | Rule-based mutations | How attackers extend dictionaries, why "P@ssw0rd" is weak | 🔜 Planned |
 | 5 | Strength estimator | Predict crack time without running the attack | 🔜 Planned |
@@ -238,6 +238,36 @@ psat/
 - OpenSSL (required from Phase 2 onward): `sudo apt install libssl-dev`
 
 ---
+## ✅ Phase 2 Complete — SHA-256 Hash Analysis
+
+Phase 2 is done. The tool now takes a SHA-256 hash as input instead 
+of a plaintext password. It hashes every candidate it generates and 
+compares it against the target hash — which means it can now analyze 
+real hashed passwords without ever knowing the plaintext upfront.
+
+The hashing is handled through OpenSSL's EVP interface, which is the 
+modern API used in production systems. Each candidate gets fed through 
+SHA-256 and compared byte by byte until a match is found.
+
+To test it yourself, generate a hash first:
+
+    echo -n "yourpassword" | openssl dgst -sha256
+
+Then run the tool and paste the hash when prompted. It will recover 
+the original password if it falls within the search space.
+
+### What this phase taught me
+Fast hashing algorithms like SHA-256 provide almost no real protection 
+against exhaustive search. A modern GPU can compute billions of SHA-256 
+hashes per second. This is exactly why password storage systems use 
+slow hashing algorithms like bcrypt instead — which is what Phase 6 
+will demonstrate.
+
+### Coming next — Phase 3: Dictionary Attack
+Instead of generating every possible combination, the tool will load 
+a real wordlist and test each entry. This will recover passwords like 
+"iloveyou" or "monkey" in milliseconds that would take hours by brute 
+force alone.
 
 ## ✍️ Author
 
