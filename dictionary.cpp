@@ -3,7 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-
+#include <cstdint>
 std::string dictionaryAttack(const std::string& target_hash,
                              const std::string& wordlist_path) {
 
